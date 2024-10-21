@@ -1,0 +1,47 @@
+       {/* <View style={tw `flex flex-row items-center px-2 justify-between`} >
+        <Text style={tw `font-semibold text-[${Colors.greenColor}]`}>{commoditTypes[offer.commodityTypeId-1].commoditTypeName}</Text>
+ 
+        { isAlaredyPicked(offer.offerId) ? <TouchableOpacity onPress={()=> deleteFromCart(offer.offerId) } style={tw `h-5 w-5 bg-[${Colors.redColor}] flex rounded-full items-center justify-center `} >
+          <Icon type='ionicon' size={15} name='remove' color="white" />
+        </TouchableOpacity> : <TouchableOpacity onPress={()=>addToCart(offer)  } style={tw `h-5 w-5 bg-[${Colors.greenColor}] flex rounded-full items-center justify-center `} >
+          <Icon type='ionicon' size={15} name='add' color="white" />
+        </TouchableOpacity>  }
+        
+        </View>
+        <View style={tw `flex-1  `}>
+
+<View style={tw `flex flex-row items-center`}>
+<Text style={tw `font-semibold ml-3 mb-1 mt-1`}>Bags : </Text>
+<Text style={tw ` ml-3 mt-1`}>{offer.bags} </Text>
+</View>
+<View style={tw `flex flex-row items-center`}>
+<Text style={tw `font-semibold ml-3 mt-1`}>Order Price : </Text>
+<Text style={tw ` ml-3 mt-1`}> {offer.orderPrice} GHS </Text>
+
+</View>
+<View style={tw `flex flex-row items-center`}>
+<Text style={tw `font-semibold ml-3 mt-1`}>Location: </Text>
+<Text style={tw ` ml-3 mt-1`}> {offer.warehouseLocation} </Text>
+</View>
+
+
+
+
+<View style={tw `h-8 mt-1 p-1`}>
+        <Text style={tw `font-semibold text-gray-400 text-right `}> 6th february 2023  </Text>
+        </View>
+
+</View> */}
+
+
+{/* <View style={tw `flex flex-row items-center`}>
+          <CheckBox
+          style={tw `m-0`}
+           checked={isAllSelected}
+           onPress={() => setisAllSelected(!isAllSelected)}
+           checkedIcon="dot-circle-o"
+           uncheckedIcon="circle-o"
+           checkedColor={`${Colors.greenColor}`}
+         />
+         <Text >{ isAllSelected ? "Deselect All" : "Select All"}</Text>
+          </View> */}

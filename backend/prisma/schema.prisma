@@ -1,0 +1,346 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+// utils
+model season {
+  id Int @id @default(autoincrement())
+  seasonValue String
+}
+model Warehouse {
+  id Int @id @default(autoincrement())
+  warehouseName String
+  warehouseLocation String
+  warehouseSymbol String
+  tickers Ticker[]
+}
+model Grade {
+  id Int @id @default(autoincrement())
+  gradeValue Int
+  tickers Ticker[]
+}
+model Commodity {
+  id Int @id @default(autoincrement())
+  commodityName String
+  commodityUrl String
+  category  CommodityCategory @relation(fields: [categoryId] ,references: [id])
+  categoryId Int
+  tickers Ticker[]
+  commodityTypes commodityType[]
+
+}
+model commodityType {
+   id    Int     @id @default(autoincrement())
+   commodityTypeName String
+   commodityTypeSymbol String
+   ticker Ticker[]
+   commodity Commodity @relation(fields: [commodityId],references: [id])
+   commodityId Int
+    basicOrders BasicOrder[]
+}
+model CommodityCategory {
+  id Int @id @default(autoincrement())
+  commodityCategoryName String
+  commodities Commodity[]
+}
+
+//Ticker
+model Ticker {
+  id    Int     @id @default(autoincrement())
+  title String  @unique
+  warehouse Warehouse @relation(fields: [warehouseId],references: [id])
+  warehouseId Int
+  commodity Commodity @relation(fields: [commodityId],references: [id])
+  commodityId Int
+  grade Grade @relation(fields: [gradeId],references: [id])
+  gradeId Int
+  commodityType commodityType @relation(fields: [commodityTypeId],references: [id])
+  commodityTypeId Int
+  country Country @relation(fields: [countryId],references: [id])
+  countryId Int
+prices Price []
+withdrawals Withdrawal []
+contracts Contract []
+advancedOrders AdvancedOrder[]
+alerts Alert[]
+user UserTicker[]
+}
+
+model Price {
+    id    Int     @id @default(autoincrement())
+    ticker Ticker @relation(fields: [tickerId],references: [id])
+    tickerId Int
+    priceValue Int
+    createdAt DateTime @default(now()) 
+  updatedAt DateTime @updatedAt
+}
+
+model Contract {
+   id    Int     @id @default(autoincrement())
+   urlLink String
+   ticker Ticker @relation(fields: [tickerId], references: [id])
+   tickerId Int
+}
+model Alert {
+   id    Int     @id @default(autoincrement())
+   user User @relation(fields: [userId], references: [id])
+   userId Int
+   ticker Ticker @relation(fields: [tickerId],references: [id])
+   tickerId Int 
+   price Int
+}
+model Article {
+    id    Int     @id @default(autoincrement())
+    title String
+    link String
+    articleImgUrl String
+    commoditiesLinked Int[]
+   publishDate DateTime @default(now()) 
+}
+
+
+model Country {
+  id    Int     @id @default(autoincrement())
+  countryNumber Int @unique
+  countrySymbol  String
+  countryName String
+  users User[]
+  tickers Ticker[]
+}
+
+//user relation
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  firstName  String
+  lastName  String
+  password  String
+  phoneCode  String
+  mobileNumber  String
+  moneyAccount  Int @default(0)
+  bankAccountNumber  Int
+  userImgUrl String
+  isVerified Boolean @default(false)
+  country    Country    @relation(fields: [countryId], references: [id])
+  countryId Int
+  alerts Alert[]
+ ticker UserTicker[]
+ calls Call[]
+ Deposits Deposit[]
+ withdrawal Withdrawal[]
+ verificationCode VerificationCode []
+ BasicOrders BasicOrder[]
+ advancedOrders  AdvancedOrder[]
+ issues Issue[]
+ Requests Request[]
+ notifications Notification[]
+ AdminNotification AdminNotification[]
+}
+
+model VerificationCode {
+  id    Int     @id @default(autoincrement())
+content Int    
+userId Int
+status Boolean @default(false)
+user User @relation(fields: [userId],references: [id])
+}
+
+
+model UserTicker {
+     userId   Int            
+  user User @relation(fields: [userId], references: [id])
+  ticker Ticker @relation(fields: [tickerId], references: [id])
+  tickerId Int
+  qty Int 
+  @@id([userId,tickerId])
+
+}
+
+model Call {
+  id    Int     @id @default(autoincrement())
+  callDate DateTime
+  userId Int
+  fromTime String
+  endTime String
+  status Boolean  @default(false)
+  user User @relation(fields: [userId],references: [id])
+}
+
+model Deposit {
+  id    Int     @id @default(autoincrement())
+  amount Int
+  type Int
+  transactionId Int? @db.Integer
+  fileUploadUrl String?
+  status Int @default(0)
+  userId Int
+  user User @relation(fields: [userId],references: [id])
+  createdAt DateTime @default(now()) 
+}
+
+model Withdrawal{
+  id    Int     @id @default(autoincrement())
+  type Int 
+  tickerId Int?
+  qty Int?
+   amount Int?  
+   userId Int
+   withDrawalTo String?
+   dateToWithdrawal DateTime?
+   status Int  @default(0)
+   user User @relation(fields: [userId],references: [id])
+   ticker Ticker? @relation(fields: [tickerId],references: [id])
+   createdAt DateTime @default(now()) 
+}
+
+
+
+
+
+model BasicOrder {
+  id    Int     @id @default(autoincrement())
+  qty Int
+  status Int @db.SmallInt @default(0)
+  commodityTypeId Int
+  orderCategory Int @db.SmallInt
+  userId Int
+  commoditType commodityType @relation(fields: [commodityTypeId],references: [id])
+  advancedOrders AdvancedOrder[]
+  user User @relation(fields: [userId],references: [id])
+  createdAt DateTime @default(now()) 
+}
+
+
+
+model AdvancedOrder { 
+   id    Int     @id @default(autoincrement())
+   userId Int?
+   harverstYear String
+   tickerId Int
+   season Int
+   orderType Int @db.SmallInt
+   qty Int
+   limitPrice Int?
+   orderValidity Int @db.SmallInt @default(2)
+   dateValidity DateTime?
+   isAttached Boolean @default(false)
+   fillType Int? @db.SmallInt
+   status Int @db.SmallInt @default(0)
+   orderCategory Int? @db.SmallInt
+   basicOrderId Int?
+   basicOrder BasicOrder? @relation(fields: [basicOrderId],references: [id])
+   user User? @relation(fields: [userId],references: [id])
+   ticker Ticker @relation(fields: [tickerId], references: [id])
+   advancedSubOrders advancedSubOrder[]
+    createdAt DateTime @default(now()) 
+    completedDate DateTime? 
+}
+
+model advancedSubOrder {
+   id    Int     @id @default(autoincrement())
+    orderId Int
+  qty Int
+  price Int
+  status Int @db.SmallInt()
+  advancedOrder AdvancedOrder @relation(fields: [orderId],references: [id])
+  createdAt DateTime @default(now()) 
+  completedDate DateTime? 
+}
+
+
+model AdminNotification {
+   id    Int     @id @default(autoincrement())
+   notificationStatus Boolean @default(false)
+   type Int 
+   notificationContent String
+   parentId Int
+   userId  Int
+   user User @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now()) 
+}
+
+model Notification {
+   id    Int     @id @default(autoincrement())
+   notificationStatus Boolean @default(false)
+   notificationTitle String
+   notificationContent String
+   userId Int
+   user User @relation(references: [id],fields: [userId])
+   createdAt DateTime @default(now()) 
+}
+
+model Role {
+   id    Int     @id @default(autoincrement())
+   roleName String
+   admins Admin[]
+}
+
+
+model Admin {
+   id    Int     @id @default(autoincrement())
+email String @unique
+firstName String
+lastName String
+adminImageUrl String
+status Boolean @default(true)
+password String
+role Role @relation(fields: [roleId],references: [id])
+roleId Int
+adminSessionHistorys adminSessionHistory[]
+}
+
+model  adminSessionHistory {
+   id    Int     @id @default(autoincrement())
+   adminId Int
+   startDate DateTime
+   endDate DateTime
+   admin Admin @relation(fields: [adminId], references: [id])
+}
+
+
+model  Issue {
+   id    Int     @id @default(autoincrement())
+   userId Int
+  content String
+   user User @relation(fields: [userId], references: [id])
+   createdAt DateTime @default(now())
+   status Boolean  @default(false)
+}
+model  Request {
+   id    Int     @id @default(autoincrement())
+   userId Int
+     parentId Int
+    type  Int 
+   user User @relation(fields: [userId], references: [id])
+   createdAt DateTime @default(now())
+   status Int  @default(1)
+}
+
+
+model Fee {
+  id Int @id @default(autoincrement())
+  rattachedOrderId Int
+  Grading Int  
+  Weighing Int
+  rattachedType Int @default(1)
+  centralDepository Int
+  moistureLoss Int
+  receiptingFee Int
+  Storage Int
+  Handling Int
+  brokerCommission Int
+  tradingFee Int
+  regulatoryFee Int
+  Drying  Int @default(0)
+  Cleaning  Int @default(0)
+  reBagging  Int @default(0)
+  fumigation  Int @default(0)
+  documentLink String?
+}

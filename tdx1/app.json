@@ -1,0 +1,51 @@
+{
+  "expo": {
+    "name": "TDX",
+    "slug": "TDX",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/Icons/TdxIcon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/Images/SplashLogo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yvesdavinci.TDX"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.yvesdavinci.TDX"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "f6a99669-067f-41b1-99cd-09f76b611557"
+      }
+    }
+  }
+}

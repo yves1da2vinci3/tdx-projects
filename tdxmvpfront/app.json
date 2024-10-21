@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "Tdx",
+    "slug": "Tdx",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/TdxIcon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/images/TdxIcon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.yvesdavinci.Tdx"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6d0b63a9-ea52-4846-8cb9-7ffadfa81aa3"
+      }
+    }
+  }
+}
